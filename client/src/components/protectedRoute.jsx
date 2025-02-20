@@ -1,10 +1,10 @@
-// components/ProtectedRoute.jsx
 import { useEffect, useState } from 'react';
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import axios from 'axios';
 
 export default function ProtectedRoute() {
+  const backend_url= "https://e-wallet-backend-rcid.onrender.com";
   const [isAuthenticated, setIsAuthenticated] = useState(null);
   const [loading, setLoading] = useState(true);
   const location = useLocation();
@@ -18,9 +18,8 @@ export default function ProtectedRoute() {
           return;
         }
 
-        // Verify token with backend
-        await axios.get('/api/auth/verify', {
-          headers: { Authorization: `Bearer ${token}` },
+        await axios.get(`${backend_url}/api/auth/verify`, {
+          headers: { Authorization: token },
         });
         setIsAuthenticated(true);
       } catch (error) {
