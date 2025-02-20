@@ -12,7 +12,7 @@ router.get('/verify', async (req, res) => {
     if (!token) {
       return res.status(401).json({ error: 'Access denied. No token provided.' });
     }
-
+    
     // Verify the token
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const user = await User.findById(decoded.userId);

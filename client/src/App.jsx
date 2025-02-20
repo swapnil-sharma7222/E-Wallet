@@ -16,13 +16,13 @@ export default function App() {
       <Toaster position="top-right" />
       <Routes>
         <Route path="/auth" element={<Auth />} />
-        <Route element={<ProtectedRoute />}>
+        {/* <Route element={<ProtectedRoute />}> */}
           <Route path="/" element={<Dashboard />} />
           <Route path="/transactions" element={<Transactions />} />
           <Route path="/transfer" element={<Transfer />} />
           <Route path="/withdraw" element={<Withdraw />} />
           <Route path="/deposit" element={<Deposit />} />
-        </Route>
+        {/* </Route> */}
       </Routes>
     </Router>
   );
