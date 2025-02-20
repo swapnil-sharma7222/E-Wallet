@@ -13,23 +13,28 @@ export const getUserBalance= async (req, res) => {
 };
 
 // Deposit
-export const depositAmount= async (req, res) => {
+export const depositAmount = async (req, res) => {
   try {
     const { amount } = req.body;
     const depositAmount = parseFloat(amount);
-    if (isNaN(depositAmount)) {
-      throw new Error('Invalid amount');
+
+    // Validate the amount
+    if (isNaN(depositAmount) || depositAmount <= 0) {
+      return res.status(400).json({ error: 'Invalid amount' });
     }
+
     const user = await User.findById(req.userId);
-    const userBalance= parseFloat(user.balance)
+    const userBalance = parseFloat(user.balance);
     
-    user.balance = userBalance+ depositAmount;
+    // Update user's balance
+    user.balance = userBalance + depositAmount;
     await user.save();
 
+    // Create transaction record
     const transaction = new Transaction({
       senderId: req.userId,
       receiverId: req.userId,
-      amount,
+      amount: depositAmount,
       type: 'deposit',
       status: 'completed',
       description: 'Deposit to wallet'
@@ -42,24 +47,35 @@ export const depositAmount= async (req, res) => {
   }
 };
 
+
 // Withdraw
-export const withdrawAmount= async (req, res) => {
+export const withdrawAmount = async (req, res) => {
   try {
     const { amount } = req.body;
     const withdrawAmount = parseFloat(amount);
-    if (isNaN(withdrawAmount)) {
-      throw new Error('Invalid amount');
+
+    // Validate the amount
+    if (isNaN(withdrawAmount) || withdrawAmount <= 0) {
+      return res.status(400).json({ error: 'Invalid amount' });
     }
+
     const user = await User.findById(req.userId);
-    const userBalance= parseFloat(user.balance)
-    if (userBalance < withdrawAmount) throw new Error('Insufficient balance');
-    user.balance = userBalance- withdrawAmount;
+    const userBalance = parseFloat(user.balance);
+
+    // Check if user has sufficient balance
+    if (userBalance < withdrawAmount) {
+      return res.status(400).json({ error: 'Insufficient balance' });
+    }
+
+    // Update user's balance
+    user.balance = userBalance - withdrawAmount;
     await user.save();
 
+    // Create transaction record
     const transaction = new Transaction({
       senderId: req.userId,
       receiverId: req.userId,
-      amount,
+      amount: withdrawAmount,
       type: 'withdrawal',
       status: 'completed',
       description: 'Withdrawal from wallet'
@@ -72,28 +88,30 @@ export const withdrawAmount= async (req, res) => {
   }
 };
 
+
+// Transfer Amount
 export const transferAmount = async (req, res) => {
   try {
     const { receiverEmail, recipientID, amount, description } = req.body;
 
     const sender = await User.findById(req.userId);
     const receiver = await User.findById(recipientID);
-    // console.log('Sender:', sender);
-    // console.log('Receiver:', receiver);
 
     // Check if receiver exists
     if (!receiver) {
-      throw new Error(`Receiver with email ${normalizedEmail} does not exist!`);
+      return res.status(400).json({ error: 'Receiver does not exist!' });
     }
+
     const transferAmount = parseFloat(amount);
-    if (isNaN(transferAmount)) {
-      throw new Error('Invalid amount');
+    if (isNaN(transferAmount) || transferAmount <= 0) {
+      return res.status(400).json({ error: 'Invalid amount' });
     }
+
     // Check sender's balance
     const senderBalance = parseFloat(sender.balance);
     const receiverBalance = parseFloat(receiver.balance);
     if (senderBalance < transferAmount) {
-      throw new Error('Insufficient balance');
+      return res.status(400).json({ error: 'Insufficient balance' });
     }
 
     // Update balances
@@ -102,11 +120,10 @@ export const transferAmount = async (req, res) => {
     await sender.save();
     await receiver.save();
 
-
     // Create transaction record
     const transaction = new Transaction({
       senderId: req.userId,
-      receiverId: recipientID, // Use receiver's ID
+      receiverId: recipientID,
       amount: transferAmount,
       type: 'transfer',
       status: 'completed',
