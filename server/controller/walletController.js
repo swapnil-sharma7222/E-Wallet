@@ -92,10 +92,10 @@ export const withdrawAmount = async (req, res) => {
 // Transfer Amount
 export const transferAmount = async (req, res) => {
   try {
-    const { email, amount, description } = req.body;
+    const { recipientEmail, amount, description } = req.body;
 
     const sender = await User.findById(req.userId);
-    const receiver = await User.findOne({email});
+    const receiver = await User.findOne({email: recipientEmail});
     console.log(sender, receiver);
     
 
