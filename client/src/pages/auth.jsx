@@ -5,7 +5,7 @@ import { toast } from 'react-hot-toast';
 import axios from 'axios';
 
 export default function Auth() {
-  const backend_url= "https://e-wallet-backend-rcid.onrender.com";
+  const backend_url = "https://e-wallet-backend-rcid.onrender.com";
   const [isLogin, setIsLogin] = useState(true);
   const [formData, setFormData] = useState({
     username: '',
@@ -21,16 +21,23 @@ export default function Auth() {
     
     try {
       const url = isLogin ? '/api/auth/login' : '/api/auth/register';
-      // const { data } = await axios.post(`${process.env.BACKEND_URL}${url}`, formData);
-      const { data } = await axios.post(`${backend_url}${url}`, formData);
-      
+      const { data } = await axios.post(`${backend_url}${url}`, formData, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
       toast.success(isLogin ? 'Login successful!' : 'Registration complete!');
       localStorage.setItem('token', data.token);
-      navigate('/');
+
+      // Navigate only after successful login
+      if (isLogin) {
+        navigate('/');
+      }
     } catch (error) {
       const errorMessage = error.response?.data?.error || 'Something went wrong';
       
-      // Check for specific error messages
+      // Display specific error messages
       if (errorMessage === 'User not found') {
         toast.error('User not found');
       } else if (errorMessage === 'Invalid credentials') {
@@ -42,7 +49,6 @@ export default function Auth() {
       setLoading(false);
     }
   };
-  
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 flex items-center justify-center p-4">
@@ -98,7 +104,7 @@ export default function Auth() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition-all flex items-center justify-center"
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition-all flex items-center justify-center cursor-pointer"
           >
             {loading ? (
               <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
