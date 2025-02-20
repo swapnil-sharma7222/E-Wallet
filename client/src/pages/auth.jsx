@@ -5,7 +5,7 @@ import { toast } from 'react-hot-toast';
 import axios from 'axios';
 
 export default function Auth() {
-  const backend_url= "http://localhost:3000";
+  const backend_url= "https://e-wallet-backend-rcid.onrender.com";
   const [isLogin, setIsLogin] = useState(true);
   const [formData, setFormData] = useState({
     username: '',

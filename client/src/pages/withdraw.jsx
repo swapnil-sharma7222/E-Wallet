@@ -4,7 +4,7 @@ import { toast } from 'react-hot-toast';
 import axios from 'axios';
 
 export default function Withdraw() {
-  const backend_url= "http://localhost:3000";
+  const backend_url= "https://e-wallet-backend-rcid.onrender.com";
   const [formData, setFormData] = useState({
     amount: '',
     description: '',

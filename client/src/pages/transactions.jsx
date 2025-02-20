@@ -3,7 +3,7 @@ import axios from 'axios';
 import { toast } from 'react-hot-toast';
 
 export default function Transactions() {
-  const backend_url= "http://localhost:3000";
+  const backend_url= "https://e-wallet-backend-rcid.onrender.com";
   const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState({

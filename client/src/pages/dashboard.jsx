@@ -5,7 +5,7 @@ import QuickActions from '../components/quickActions.jsx';
 import RecentTransactions from '../components/recentTransactions.jsx';
 
 export default function Dashboard() {
-  const backend_url= "http://localhost:3000";
+  const backend_url= "https://e-wallet-backend-rcid.onrender.com";
   const [balance, setBalance] = useState(0);
   const [transactions, setTransactions] = useState([]);
 
