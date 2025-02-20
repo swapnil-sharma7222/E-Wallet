@@ -92,10 +92,12 @@ export const withdrawAmount = async (req, res) => {
 // Transfer Amount
 export const transferAmount = async (req, res) => {
   try {
-    const { receiverEmail, recipientID, amount, description } = req.body;
+    const { email, amount, description } = req.body;
 
     const sender = await User.findById(req.userId);
-    const receiver = await User.findById(recipientID);
+    const receiver = await User.findOne({email});
+    console.log(sender, receiver);
+    
 
     // Check if receiver exists
     if (!receiver) {
@@ -123,7 +125,7 @@ export const transferAmount = async (req, res) => {
     // Create transaction record
     const transaction = new Transaction({
       senderId: req.userId,
-      receiverId: recipientID,
+      receiverId: receiver._id,
       amount: transferAmount,
       type: 'transfer',
       status: 'completed',

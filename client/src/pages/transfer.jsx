@@ -7,7 +7,7 @@ export default function Transfer() {
   const backend_url= "https://e-wallet-backend-rcid.onrender.com";
   const [formData, setFormData] = useState({
     recipientEmail: '',
-    recipientID: '',
+    // recipientID: '',
     amount: '',
     description: '',
   });
@@ -63,7 +63,7 @@ export default function Transfer() {
             />
           </div>
 
-          <div>
+          {/* <div>
             <label htmlFor="recipientID" className="block text-sm font-medium text-gray-700 mb-2">
               Recipient ID
             </label>
@@ -77,7 +77,7 @@ export default function Transfer() {
               className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
               placeholder="Enter recipient's ID"
             />
-          </div>
+          </div> */}
 
           <div>
             <label htmlFor="amount" className="block text-sm font-medium text-gray-700 mb-2">
