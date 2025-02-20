@@ -19,8 +19,8 @@ export default function ProtectedRoute() {
         }
 
         await axios.get(`${backend_url}/api/auth/verify`, {
-          headers: { Authorization: token },
-        });
+          headers: { Authorization: `Bearer ${token}` },
+        });        
         setIsAuthenticated(true);
       } catch (error) {
         localStorage.removeItem('token');
